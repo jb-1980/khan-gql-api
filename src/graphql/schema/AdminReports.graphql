@@ -1,0 +1,100 @@
+type AdminReportCourse {
+  id: ID
+  key: String
+  masteryEnabled: Boolean
+  title: String
+  translatedTitle: String
+}
+
+type AdminReport {
+  id: ID
+  status: String
+  blobCreatedAt: String
+  blobExpiresAt: String
+  reportType: String
+  startDate: String
+  endDate: String
+  schools: [String]
+  createdAt: String
+  fileName: String
+  fileSize: String
+  bands: [String]
+  courseSISValues: [String]
+  teacherKaids: [String]
+  course: AdminReportCourse
+  grades: [String]
+  strandKey: String
+  notifyByEmail: Boolean
+  kaid: ID!
+  districtKeyId: ID!
+}
+
+type RequestAdminReportError {
+  "Possible values: UNAUTHORIZED"
+  code: String
+}
+
+type RequestAdminReportResult {
+  adminReport: AdminReport
+  error: RequestAdminReportError
+}
+
+type GetLastNAdminReportsForUserResult {
+  adminReports: [AdminReport]
+  error: RequestAdminReportError
+}
+
+extend type Query {
+  getLastNAdminReportsForUser(
+    kaid: String!
+    districtID: String!
+    topNResults: Int!
+  ): GetLastNAdminReportsForUserResult
+}
+
+enum AdminReportType {
+  KAD_SKILLS_PROGRESS
+}
+
+type SignURLForReportResult {
+  url: String
+  error: RequestAdminReportError
+}
+
+extend type Mutation {
+  loginWithPassword(
+    identifier: String!
+    password: String!
+  ): LoginWithPasswordMutation!
+  requestAdminReportCSV(
+    "Some Khan Specific ID"
+    kaid: ID!
+    "The khan id of the district using the admin report"
+    districtID: ID!
+    "The type of report to generate"
+    reportType: AdminReportType!
+    "The start date of the report"
+    startDate: DateTime!
+    "The end date of the report"
+    endDate: DateTime!
+    "The schools to include in the report, probably should have typed as [ID!]!"
+    schools: [String!]!
+    "The grades to include in the report: 'THIRD', 'FOURTH', 'FIFTH', 'SIXTH', 'SEVENTH', 'EIGHTH', 'NINTH', 'TENTH', 'ELEVENTH', 'TWELFTH', 'NOTAPP'"
+    grades: [String!]
+    "The teachers to include in the report"
+    teacherKaids: [String!]
+    "The course SIS values to include in the report"
+    courseSISValues: [String!]
+    "The Khan Academy course ID to include in the report: x3184e0ec === 2nd Grade Math"
+    courseID: String
+    "Don't know yet"
+    strandKey: String
+    "Don't know yet"
+    bands: [String!]
+    "Whether to notify by email when the report is ready"
+    notifyByEmail: Boolean!
+    "The locale to use for the report"
+    kaLocale: String
+  ): RequestAdminReportResult!
+  signURLForReport(recordID: String!): SignURLForReportResult!
+}

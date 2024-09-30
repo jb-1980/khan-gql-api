@@ -1,0 +1,16 @@
+type Topic {
+  contentKind: String
+  id: ID!
+  slug: String
+  translatedTitle: String
+  relativeUrl: String
+}
+
+type CurationItemMastery {
+  percentage: Int
+}
+
+type SubjectProgress {
+  topic: Topic
+  currentMastery: CurationItemMastery
+}

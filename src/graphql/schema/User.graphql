@@ -1,0 +1,20 @@
+type Locale {
+  id: ID!
+  kaLocale: String
+  status: String
+}
+
+type User {
+  id: ID!
+  kaid: String
+  canAccessDistrictsHomepage: Boolean
+  isTeacher: Boolean
+  hasUnresolvedInvitations: Boolean
+  transferAuthToken: String
+  preferredKaLocale: Locale
+  subjectProgressesBySlug(slugs: [String!]): [SubjectProgress] # SubjectProgress is defined in Content.graphql
+}
+
+extend type Query {
+  user: User
+}

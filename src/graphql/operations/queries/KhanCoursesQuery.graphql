@@ -1,0 +1,17 @@
+query KhanCoursesQuery($districtId: ID!, $kaLocale: String!) {
+  districtById(districtId: $districtId) {
+    id
+    courses(kaLocale: $kaLocale) {
+      id
+      key
+      translatedTitle
+      domain: parent {
+        id
+        translatedTitle
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

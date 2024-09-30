@@ -1,0 +1,15 @@
+type Course {
+  id: ID!
+  key: String
+  translatedTitle: String
+  parent: Topic
+}
+
+type District {
+  id: ID!
+  courses(kaLocale: String!): [Course]
+}
+
+extend type Query {
+  districtById(districtId: ID!): District
+}

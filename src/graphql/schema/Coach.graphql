@@ -1,0 +1,63 @@
+type CoachAssignmentContents {
+  id: ID
+  translatedTitle: String
+  kind: String
+  defaultUrlPath: String
+}
+
+type CoachAssignmentItemCompletionStates {
+  completedOn: String
+  studentKaid: String
+  bestScore: CoachAssignmentItemCompletionStatesBestScore
+}
+
+type CoachAssignmentItemCompletionStatesBestScore {
+  numAttempted: Int
+  numCorrect: Int
+}
+
+type CoachAssignment {
+  id: ID
+  dueDate: String
+  contents: CoachAssignmentContents
+  itemCompletionStatesForAllStudents: [CoachAssignmentItemCompletionStates]
+}
+
+type CoachAssignmentsPageInfo {
+  nextCursor: String
+}
+
+type CoachAssignmentsPage {
+  assignments: [CoachAssignment]
+  pageInfo: CoachAssignmentsPageInfo
+}
+
+type CoachStudentKaidsAndNicknames {
+  id: ID
+  coachNickname: String
+}
+
+type CoachStudent {
+  id: ID
+  cacheId: ID
+  studentKaidsAndNicknames: [CoachStudentKaidsAndNicknames]
+  assignmentsPage(
+    filters: CoachAssignmentFilters
+    after: ID
+    pageSize: Int
+  ): CoachAssignmentsPage
+}
+
+type Coach {
+  id: ID
+  studentList(id: String): [CoachStudent]
+}
+
+input CoachAssignmentFilters {
+  dueAfter: String
+  dueBefore: String
+}
+
+extend type Query {
+  coach: Coach!
+}
