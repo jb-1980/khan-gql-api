@@ -1,6 +1,6 @@
 {
   "name": "khan-gql-api",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "author": "joseph",
   "type": "module",
@@ -19,7 +19,7 @@
     "build": "npm run generate && tsc",
     "generate": "graphql-codegen",
     "generate:watch": "graphql-codegen --watch",
-    "local-release": "changesets version && changesets publish",
+    "local-release": "changeset version && changeset publish",
     "prepublishOnly": "npm run ci"
   },
   "husky": {
