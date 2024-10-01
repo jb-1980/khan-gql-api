@@ -4,6 +4,10 @@ import { DateTimeResolver } from "graphql-scalars"
 const config: CodegenConfig = {
   schema: ["src/graphql/schema/**/*.graphql"],
   documents: "src/graphql/operations/**/*.graphql",
+  overwrite: true,
+  hooks: {
+    afterAllFileWrite: [`prettier --write`],
+  },
   generates: {
     "src/graphql/sdk.generated.ts": {
       plugins: [
@@ -12,10 +16,10 @@ const config: CodegenConfig = {
         "typescript-graphql-request",
       ],
       config: {
-        rawRequest: true,
         scalars: {
           DateTime: DateTimeResolver.extensions.codegenScalarType,
         },
+        gqlImport: "graphql-tag#gql",
       },
     },
   },

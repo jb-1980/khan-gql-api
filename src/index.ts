@@ -1,9 +1,9 @@
 import { GraphQLClient } from "graphql-request"
-import { getSdk } from "./graphql/sdk.generated"
+import { getSdk, Sdk } from "./graphql/sdk.generated.js"
 import nodeFetch from "node-fetch"
 import fetchCookie from "fetch-cookie"
 
-export const getKhanGraphQLSdk = () => {
+export const getKhanGraphQLSdk = (): Sdk => {
   const customFetch = fetchCookie(nodeFetch)
 
   const client = new GraphQLClient(
@@ -13,7 +13,6 @@ export const getKhanGraphQLSdk = () => {
       fetch: customFetch,
       credentials: "include",
       requestMiddleware: (request) => {
-        console.dir({ headers: request.headers }, { depth: null, colors: true })
         return {
           ...request,
           url: `${request.url}/${request.operationName}`,
@@ -26,3 +25,5 @@ export const getKhanGraphQLSdk = () => {
   )
   return getSdk(client)
 }
+
+export default getKhanGraphQLSdk

@@ -3,28 +3,28 @@
   "version": "0.1.0",
   "license": "MIT",
   "author": "joseph",
-  "main": "dist/index.js",
   "type": "module",
-  "module": "dist/khan-gql-api.esm.js",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
     "src"
   ],
   "scripts": {
+    "ci": "npm run generate && npm run build && npm run check-format && npm run check-exports",
+    "check-format": "prettier --check .",
+    "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
+    "format": "prettier --write .",
     "analyze": "size-limit --why",
-    "build": "dts build",
-    "lint": "dts lint",
-    "prepare": "graphql-codegen && dts build",
-    "size": "size-limit",
-    "start": "dts watch",
-    "test": "dts test",
+    "build": "npm run generate && tsc",
     "generate": "graphql-codegen",
-    "generate:watch": "graphql-codegen --watch"
+    "generate:watch": "graphql-codegen --watch",
+    "local-release": "changesets version && changesets publish",
+    "prepublishOnly": "npm run ci"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "dts lint"
+      "pre-commit": "npm run ci"
     }
   },
   "prettier": {
@@ -37,27 +37,15 @@
     "testEnvironment": "node"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
-  "size-limit": [
-    {
-      "path": "dist/khan-gql-api.cjs.production.min.js",
-      "limit": "10 KB"
-    },
-    {
-      "path": "dist/khan-gql-api.esm.js",
-      "limit": "10 KB"
-    }
-  ],
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.16.4",
+    "@changesets/cli": "^2.27.8",
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/typescript-graphql-request": "^6.2.0",
     "@parcel/watcher": "^2.4.1",
-    "@size-limit/preset-small-lib": "^11.1.5",
-    "@tsconfig/recommended": "^1.0.7",
-    "dts-cli": "^2.0.5",
     "husky": "^9.1.6",
-    "size-limit": "^11.1.5",
     "tslib": "^2.7.0",
     "typescript": "^5.6.2"
   },
